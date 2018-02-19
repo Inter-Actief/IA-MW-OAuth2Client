@@ -42,18 +42,22 @@ class IAProvider extends \League\OAuth2\Client\Provider\GenericProvider
         $url = $this->getResourceOwnerDetailsUrl($token);
         $endpoint = $this->getResourceOwnerDetailsEndpoint();
 
-        $options = [
-            'headers' => [
-                'Authorization' => 'Bearer '.$token
-            ],
-            GuzzleHttp\RequestOptions::JSON => [
-                'method' => $endpoint,
-                'id' => 'IAMediaWikiProvider'
-            ]
-        ];
-
-        $request = $this->getAuthenticatedRequest(self::METHOD_POST, $url, $token, $options);
-        $result = json_decode($this->getResponse($request));
+        $context = stream_context_create(array(
+            'http' => array(
+                'header' => implode("\r\n", array(
+                    "Content-Type: application/json",
+                    "Authorization: Bearer ".$token,
+                    "User-Agent: IA Mediawiki/1.0"
+                )),
+                'method' => "POST",
+                'content' => json_encode([
+                    'method' => $endpoint,
+                    'id' => "IAMediaWikiProvider",
+                ])
+            )
+        ));
+        $result = file_get_contents($url, false, $context);
+        $result = json_decode($result);
 
         $details = [];
 
