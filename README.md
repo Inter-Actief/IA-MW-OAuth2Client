@@ -30,6 +30,7 @@ $wgOAuth2Client['client']['secret'] = ''; // The client secret assigned to you b
 $wgOAuth2Client['configuration']['authorize_endpoint']     = ''; // Authorization URL
 $wgOAuth2Client['configuration']['access_token_endpoint']  = ''; // Token URL
 $wgOAuth2Client['configuration']['api_endpoint']           = ''; // URL to IA API
+$wgOAuth2Client['configuration']['api_user_endpoint']      = ''; // Name of user details API endpoint
 $wgOAuth2Client['configuration']['redirect_uri']           = ''; // URL for OAuth2 server to redirect to
 
 $wgOAuth2Client['configuration']['username'] = 'username'; // JSON path to username
