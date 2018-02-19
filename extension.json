@@ -13,7 +13,8 @@
 	"type": "other",
 	"AutoloadClasses": {
 		"OAuth2ClientHooks": "OAuth2Client.php",
-		"SpecialIAOAuth2Client": "SpecialIAOAuth2Client.php"
+		"SpecialIAOAuth2Client": "SpecialIAOAuth2Client.php",
+		"IAProvider": "IAProvider.php"
 	},
 	"ExtensionMessagesFiles": {
 		"OAuth2ClientAlias": "OAuth2Client.alias.php"
