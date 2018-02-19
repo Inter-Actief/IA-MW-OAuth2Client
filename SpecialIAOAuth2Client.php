@@ -1,12 +1,15 @@
 <?php
 /**
- * SpecialOAuth2Client.php
- * Based on TwitterLogin by David Raison, which is based on the guideline published by Dave Challis at http://blogs.ecs.soton.ac.uk/webteam/2010/04/13/254/
+ * SpecialIAOAuth2Client.php
+ *
+ * Based on OAuth2Client by Joost de Keijzer and Nischai Nahata, which is based on TwitterLogin by David Raison,
+ * which is based on the guideline published by Dave Challis at http://blogs.ecs.soton.ac.uk/webteam/2010/04/13/254/
  * @license: LGPL (GNU Lesser General Public License) http://www.gnu.org/licenses/lgpl.html
  *
- * @file SpecialOAuth2Client.php
+ * @file SpecialIAOAuth2Client.php
  * @ingroup OAuth2Client
  *
+ * @author Kevin Alberts
  * @author Joost de Keijzer
  * @author Nischay Nahata for Schine GmbH
  *
@@ -18,7 +21,7 @@ if ( !defined( 'MEDIAWIKI' ) ) {
 	die( 'This is a MediaWiki extension, and must be run from within MediaWiki.' );
 }
 
-class SpecialOAuth2Client extends SpecialPage {
+class SpecialIAOAuth2Client extends SpecialPage {
 
 	private $_provider;
 
@@ -43,15 +46,26 @@ class SpecialOAuth2Client extends SpecialPage {
 
 		require __DIR__ . '/vendors/oauth2-client/vendor/autoload.php';
 
-		$this->_provider = new \League\OAuth2\Client\Provider\GenericProvider([
+		$this->_provider = new IAProvider([
 			'clientId'                => $wgOAuth2Client['client']['id'],    // The client ID assigned to you by the provider
 			'clientSecret'            => $wgOAuth2Client['client']['secret'],   // The client password assigned to you by the provider
 			'redirectUri'             => $wgOAuth2Client['configuration']['redirect_uri'],
 			'urlAuthorize'            => $wgOAuth2Client['configuration']['authorize_endpoint'],
 			'urlAccessToken'          => $wgOAuth2Client['configuration']['access_token_endpoint'],
 			'urlResourceOwnerDetails' => $wgOAuth2Client['configuration']['api_endpoint'],
+            'urlResourceOwnerEndpoint' => $wgOAuth2Client['configuration']['api_user_endpoint'],
 			'scopes'                  => $wgOAuth2Client['configuration']['scopes']
 		]);
+
+//		$this->_provider = new \League\OAuth2\Client\Provider\GenericProvider([
+//			'clientId'                => $wgOAuth2Client['client']['id'],    // The client ID assigned to you by the provider
+//			'clientSecret'            => $wgOAuth2Client['client']['secret'],   // The client password assigned to you by the provider
+//			'redirectUri'             => $wgOAuth2Client['configuration']['redirect_uri'],
+//			'urlAuthorize'            => $wgOAuth2Client['configuration']['authorize_endpoint'],
+//			'urlAccessToken'          => $wgOAuth2Client['configuration']['access_token_endpoint'],
+//			'urlResourceOwnerDetails' => $wgOAuth2Client['configuration']['api_endpoint'],
+//			'scopes'                  => $wgOAuth2Client['configuration']['scopes']
+//		]);
 	}
 
 	// default method being called by a specialpage

@@ -1,7 +1,8 @@
 {
-	"name": "MW-OAuth2Client",
-	"version": "0.3",
+	"name": "MW-IA-OAuth2Client",
+	"version": "0.3.1",
 	"author": [
+		"[https://kevinalberts.nl Kevin Alberts]",
 		"[http://dekeijzer.org Joost de Keijzer]",
 		"[https://www.mediawiki.org/wiki/User:Nischayn22 Nischay Nahata]",
 		"[https://star-made.org Schine GmbH]"
@@ -12,7 +13,7 @@
 	"type": "other",
 	"AutoloadClasses": {
 		"OAuth2ClientHooks": "OAuth2Client.php",
-		"SpecialOAuth2Client": "SpecialOAuth2Client.php"
+		"SpecialOAuth2Client": "SpecialIAOAuth2Client.php"
 	},
 	"ExtensionMessagesFiles": {
 		"OAuth2ClientAlias": "OAuth2Client.alias.php"
@@ -23,7 +24,7 @@
 		]
 	},
 	"SpecialPages": {
-		"OAuth2Client": "SpecialOAuth2Client"
+		"OAuth2Client": "SpecialIAOAuth2Client"
 	},
 	"MessagesDirs": {
 		"MyExtension": [
