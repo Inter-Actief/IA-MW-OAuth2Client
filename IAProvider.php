@@ -71,7 +71,7 @@ class IAProvider extends \League\OAuth2\Client\Provider\GenericProvider
             $details = (array) $result->result;
 
             // Overwrite the e-mail address with the address stored in the AD
-            $details['email'] = $details['username'].'@'.getResourceOwnerDomain();
+            $details['email'] = $details['username'].'@'.$this->getResourceOwnerDomain();
         }
 
         return array('user' => $details);
