@@ -61,7 +61,7 @@ class IAProvider extends \League\OAuth2\Client\Provider\GenericProvider
 
         $details = [];
 
-        if($result->error !== null){
+        if($result->error === null){
             $details = (array) $result->result;
         }
 
