@@ -32,6 +32,7 @@ $wgOAuth2Client['configuration']['access_token_endpoint']  = ''; // Token URL
 $wgOAuth2Client['configuration']['api_endpoint']           = ''; // URL to IA API
 $wgOAuth2Client['configuration']['api_user_endpoint']      = ''; // Name of user details API endpoint
 $wgOAuth2Client['configuration']['redirect_uri']           = ''; // URL for OAuth2 server to redirect to
+$wgOAuth2Client['configuration']['domain']                 = ''; // The AD domain to match the e-mail address to
 
 $wgOAuth2Client['configuration']['username'] = 'username'; // JSON path to username
 $wgOAuth2Client['configuration']['email'] = 'email'; // JSON path to email

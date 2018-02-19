@@ -17,6 +17,11 @@ class IAProvider extends \League\OAuth2\Client\Provider\GenericProvider
     public $urlResourceOwnerEndpoint;
 
     /**
+     * @var string
+     */
+    public $resourceOwnerDomain;
+
+    /**
      * Returns all options that are required.
      *
      * @return array
@@ -28,6 +33,7 @@ class IAProvider extends \League\OAuth2\Client\Provider\GenericProvider
             'urlAccessToken',
             'urlResourceOwnerDetails',
             'urlResourceOwnerEndpoint',
+            'resourceOwnerDomain'
         ];
     }
 
@@ -63,6 +69,9 @@ class IAProvider extends \League\OAuth2\Client\Provider\GenericProvider
 
         if($result->error === null){
             $details = (array) $result->result;
+
+            // Overwrite the e-mail address with the address stored in the AD
+            $details['email'] = $details['username'].'@'.getResourceOwnerDomain();
         }
 
         return array('user' => $details);
@@ -71,6 +80,11 @@ class IAProvider extends \League\OAuth2\Client\Provider\GenericProvider
     public function getResourceOwnerDetailsEndpoint()
     {
         return $this->urlResourceOwnerEndpoint;
+    }
+
+    public function getResourceOwnerDomain()
+    {
+        return $this->resourceOwnerDomain;
     }
 
 }

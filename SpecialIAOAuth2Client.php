@@ -54,18 +54,10 @@ class SpecialIAOAuth2Client extends SpecialPage {
 			'urlAccessToken'          => $wgOAuth2Client['configuration']['access_token_endpoint'],
 			'urlResourceOwnerDetails' => $wgOAuth2Client['configuration']['api_endpoint'],
             'urlResourceOwnerEndpoint' => $wgOAuth2Client['configuration']['api_user_endpoint'],
-			'scopes'                  => $wgOAuth2Client['configuration']['scopes']
+			'scopes'                  => $wgOAuth2Client['configuration']['scopes'],
+            'resourceOwnerDomain'     => $wgOAuth2Client['configuration']['domain']
 		]);
 
-//		$this->_provider = new \League\OAuth2\Client\Provider\GenericProvider([
-//			'clientId'                => $wgOAuth2Client['client']['id'],    // The client ID assigned to you by the provider
-//			'clientSecret'            => $wgOAuth2Client['client']['secret'],   // The client password assigned to you by the provider
-//			'redirectUri'             => $wgOAuth2Client['configuration']['redirect_uri'],
-//			'urlAuthorize'            => $wgOAuth2Client['configuration']['authorize_endpoint'],
-//			'urlAccessToken'          => $wgOAuth2Client['configuration']['access_token_endpoint'],
-//			'urlResourceOwnerDetails' => $wgOAuth2Client['configuration']['api_endpoint'],
-//			'scopes'                  => $wgOAuth2Client['configuration']['scopes']
-//		]);
 	}
 
 	// default method being called by a specialpage
