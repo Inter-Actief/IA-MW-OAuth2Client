@@ -1,6 +1,6 @@
 {
 	"oauth2client": "OAuth2 Client",
-	"oauth2client-act-as-a-client-to-any-oauth2-server": "Act as a client to any OAuth2 server",
+	"oauth2client-act-as-a-client-to-any-oauth2-server": "Act as a client to the Inter-''Actief'' OAuth2 server",
 	"oauth2client-couldnotconnect": "Could not connect to OAuth2 Server",
 	"oauth2client-header-link-text": "$1 login",
 	"oauth2client-login-header": "$1 login",

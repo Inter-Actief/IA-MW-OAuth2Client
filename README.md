@@ -1,5 +1,5 @@
-# MediaWiki OAuth2 Client
-MediaWiki implementation of the PHP League's [OAuth2 Client](https://github.com/thephpleague/oauth2-client), to allow MediaWiki to act as a client to any OAuth2 server. Currently maintained by [Schine GmbH](https://www.star-made.org/).
+# MediaWiki Inter-_Actief_ OAuth2 Client
+MediaWiki implementation of the PHP League's [OAuth2 Client](https://github.com/thephpleague/oauth2-client), to allow MediaWiki to act as a client to the [Inter-_Actief_ website's](https://www.inter-actief.utwente.nl/) OAuth2 server.
 
 Requires MediaWiki 1.25+.
 
@@ -29,7 +29,7 @@ $wgOAuth2Client['client']['secret'] = ''; // The client secret assigned to you b
 
 $wgOAuth2Client['configuration']['authorize_endpoint']     = ''; // Authorization URL
 $wgOAuth2Client['configuration']['access_token_endpoint']  = ''; // Token URL
-$wgOAuth2Client['configuration']['api_endpoint']           = ''; // URL to fetch user JSON
+$wgOAuth2Client['configuration']['api_endpoint']           = ''; // URL to IA API
 $wgOAuth2Client['configuration']['redirect_uri']           = ''; // URL for OAuth2 server to redirect to
 
 $wgOAuth2Client['configuration']['username'] = 'username'; // JSON path to username
