@@ -1,6 +1,5 @@
 <?php
 
-use League\OAuth2\Client\Provider\ResourceOwnerInterface;
 use League\OAuth2\Client\Token\AccessToken;
 
 /**
@@ -15,7 +14,7 @@ class IAProvider extends \League\OAuth2\Client\Provider\GenericProvider
     /**
      * @var string
      */
-    private $urlResourceOwnerDetailsEndpoint;
+    public $urlResourceOwnerEndpoint;
 
     /**
      * Returns all options that are required.
@@ -62,12 +61,12 @@ class IAProvider extends \League\OAuth2\Client\Provider\GenericProvider
             $details = (array) $result->result;
         }
 
-        return $details;
+        return array('user' => $details);
     }
 
     public function getResourceOwnerDetailsEndpoint()
     {
-        return $this->urlResourceOwnerDetailsEndpoint;
+        return $this->urlResourceOwnerEndpoint;
     }
 
 }
