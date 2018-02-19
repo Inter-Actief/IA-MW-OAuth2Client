@@ -178,8 +178,8 @@ class SpecialIAOAuth2Client extends SpecialPage {
 		$sessionUser = User::newFromSession($this->getRequest());
 		$sessionUser->load();
 
-		// Fire the UserLoggedInHook to let other plugins know a user has logged in.
-        Hooks::run('UserLoggedIn', [$user]);
+		// Fire the PluggableAuthPopulateGroups to let the AD plugin know a user has logged in.
+        Hooks::run('PluggableAuthPopulateGroups', [$this->getUser()]);
 
 		return $user;
 	}
