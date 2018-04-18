@@ -78,7 +78,6 @@ class SpecialIAOAuth2Client extends SpecialPage {
 	}
 
 	private function _redirect() {
-
 		global $wgRequest, $wgOut;
 		$wgRequest->getSession()->persist();
 		$wgRequest->getSession()->set('returnto', $wgRequest->getVal( 'returnto' ));
@@ -97,38 +96,112 @@ class SpecialIAOAuth2Client extends SpecialPage {
 	}
 
 	private function _handleCallback(){
-		try {
+        global $wgOut, $wgRequest;
+        $wgRequest->getSession()->persist();
 
-			// Try to get an access token using the authorization code grant.
-			$accessToken = $this->_provider->getAccessToken('authorization_code', [
-				'code' => $_GET['code']
-			]);
-		} catch (\League\OAuth2\Client\Provider\Exception\IdentityProviderException $e) {
+        // Check if there is already an access token or refresh token in the session, if so, use that one
+        // to try and login.
+        if($wgRequest->getSession()->exists('ia-oauth2-accesstoken')) {
+            $aToken = $wgRequest->getSession()->get('ia-oauth2-accesstoken');
+            $expires = $wgRequest->getSession()->get('ia-oauth2-expires');
+            $rToken = $wgRequest->getSession()->get('ia-oauth2-refreshtoken');
+            $resourceOwnerId = $wgRequest->getSession()->get('ia-oauth2-resourceownerid');
+            $details = array(
+                'access_token' => $aToken,
+                'expires' => $expires,
+                'refresh_token' => $rToken,
+                'resource_owner_id' => $resourceOwnerId
+            );
+            print("Token found in session! Details: ");
+            print_r($details);
+            $token = new \League\OAuth2\Client\Token\AccessToken($details);
 
-			// Failed to get the access token or user details.
-			exit($e->getMessage());
+            // Check if the access token is not expired
+            if ($expires < time()) {
+                // Expired. Try to get an access token using the refresh token grant.
+                print("Token is expired! Getting new one using refresh token");
 
-		}
+                try {
 
-		$resourceOwner = $this->_provider->getResourceOwner($accessToken);
-		$user = $this->_userHandling( $resourceOwner->toArray() );
-		$user->setCookies();
+                    // Try to get an access token using the authorization code grant.
+                    $token = $this->_provider->getAccessToken('authorization_code', [
+                        'code' => $_GET['code']
+                    ]);
+                } catch (\League\OAuth2\Client\Provider\Exception\IdentityProviderException $e) {
+                    // Failed to get the access token or user details. Remove the token from the session and quit
+                    $wgRequest->getSession()->remove('ia-oauth2-accesstoken');
+                    $wgRequest->getSession()->remove('ia-oauth2-expires');
+                    $wgRequest->getSession()->remove('ia-oauth2-refreshtoken');
+                    $wgRequest->getSession()->remove('ia-oauth2-resourceownerid');
 
-		global $wgOut, $wgRequest;
-		$title = null;
-		$wgRequest->getSession()->persist();
-		if( $wgRequest->getSession()->exists('returnto') ) {
-			$title = Title::newFromText( $wgRequest->getSession()->get('returnto') );
-			$wgRequest->getSession()->remove('returnto');
-			$wgRequest->getSession()->save();
-		}
+                    // Failed to get the access token or user details.
+                    exit($e->getMessage());
 
-		if( !$title instanceof Title || 0 > $title->mArticleID ) {
-			$title = Title::newMainPage();
-		}
+                }
+
+                print("New token get success! Saving in session");
+
+                // Save the new access token and details in the session
+                $wgRequest->getSession()->set('ia-oauth2-accesstoken', $token->getToken());
+                $wgRequest->getSession()->set('ia-oauth2-expiration', $token->getExpires());
+                $wgRequest->getSession()->set('ia-oauth2-refreshtoken', $token->getRefreshToken());
+                $wgRequest->getSession()->set('ia-oauth2-resourceownerid', $token->getResourceOwnerId());
+            }
+
+            // Not expired (any more). Use token to login.
+            print("Logging in with saved token");
+
+        // Else, a token does not exist, request a new token.
+        }else{
+            print("No access token in session. Getting it.");
+            try {
+
+                // Try to get an access token using the authorization code grant.
+                $token = $this->_provider->getAccessToken('authorization_code', [
+                    'code' => $_GET['code']
+                ]);
+            } catch (\League\OAuth2\Client\Provider\Exception\IdentityProviderException $e) {
+                // Failed to get the access token or user details.
+                exit($e->getMessage());
+
+            }
+            print("New token get success! Saving in session");
+            // Save the new access token and details in the session
+            $wgRequest->getSession()->set('ia-oauth2-accesstoken', $token->getToken());
+            $wgRequest->getSession()->set('ia-oauth2-expiration', $token->getExpires());
+            $wgRequest->getSession()->set('ia-oauth2-refreshtoken', $token->getRefreshToken());
+            $wgRequest->getSession()->set('ia-oauth2-resourceownerid', $token->getResourceOwnerId());
+        }
+
+        // Save session before redirect
+        $wgRequest->getSession()->save();
+
+		$title = $this->_loginWithToken($token);
+
 		$wgOut->redirect( $title->getFullURL() );
 		return true;
 	}
+
+	private function _loginWithToken($accessToken){
+        $resourceOwner = $this->_provider->getResourceOwner($accessToken);
+        $user = $this->_userHandling( $resourceOwner->toArray() );
+        $user->setCookies();
+
+        global $wgRequest;
+        $title = null;
+        $wgRequest->getSession()->persist();
+        if( $wgRequest->getSession()->exists('returnto') ) {
+            $title = Title::newFromText( $wgRequest->getSession()->get('returnto') );
+            $wgRequest->getSession()->remove('returnto');
+            $wgRequest->getSession()->save();
+        }
+
+        if( !$title instanceof Title || 0 > $title->mArticleID ) {
+            $title = Title::newMainPage();
+        }
+
+        return $title;
+    }
 
 	private function _default(){
 		global $wgOAuth2Client, $wgOut, $wgUser, $wgScriptPath, $wgExtensionAssetsPath;
